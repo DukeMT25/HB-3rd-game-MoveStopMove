@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : Character
@@ -10,6 +11,20 @@ public class Player : Character
 
     public Vector3 MoveDirection { get; set; }
 
+    public P_Idle IdleState { get; set; }
+    public P_Run RunState { get; set; }
+
+    //Atk
+    public P_Attack AtkState { get; set; }
+    private bool isAtk;
+    public bool IsAtk { get => isAtk; set => isAtk = value; }
+
+    //Ulti
+    public P_Ulti UltiState { get; set; }
+    private bool isUlti;
+    public bool IsUlti { get => isUlti; set => isUlti = value; }
+
+
     protected override void Start()
     {
         base.Start();
@@ -19,7 +34,11 @@ public class Player : Character
     {
         base.OnInit();
 
-        //StateMachine.Initialize();
+        IdleState = new P_Idle(this, _anim, Constraint.idleName, this);
+        RunState = new P_Run(this, _anim, Constraint.runName, this);
+        AtkState = new P_Attack(this, _anim, Constraint.atkName, this);
+
+        StateMachine.Initialize(IdleState);
     }
 
     protected override void Update()
@@ -36,17 +55,14 @@ public class Player : Character
         //Debug.DrawRay(transform.position, dwn * 10f);
         if (Physics.Raycast(Ray.transform.position, dwn, out hit, 5f))
         {
-            //if (!hit.transform.GetComponent<EndBridge>())
-            //{
-            //    transform.position = hit.point;
-            //}
             transform.position = hit.point;
         }
     }
 
     private void Moving()
     {
-        MoveDirection = new Vector3(_floatingJoystick.Horizontal, _rb.velocity.y, _floatingJoystick.Vertical) * base.moveSpeed;
+        //MoveDirection = new Vector3(_floatingJoystick.Horizontal, _rb.velocity.y, _floatingJoystick.Vertical) * moveSpeed * Time.deltaTime;
+        MoveDirection = (Vector3.right * _floatingJoystick.Horizontal + Vector3.forward * _floatingJoystick.Vertical) * moveSpeed * Time.deltaTime;
         transform.position += MoveDirection;
         if (MoveDirection != Vector3.zero)
         {

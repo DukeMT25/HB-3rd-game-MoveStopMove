@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    [SerializeField] Animator _anim;
+    [SerializeField] protected Animator _anim;
     [SerializeField] protected float moveSpeed;
 
     public StateMachine StateMachine { get; set; }
@@ -25,6 +25,8 @@ public class Character : MonoBehaviour
 
     protected virtual void Update()
     {
-        //StateMachine.CurrentState.Tick();
+        StateMachine.CurrentState.Tick();
     }
+
+
 }
