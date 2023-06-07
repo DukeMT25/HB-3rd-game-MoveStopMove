@@ -45,19 +45,19 @@ public class Player : Character
     {
         base.Update();
         Moving();
-        PullDown();
+        //PullDown();
     }
 
-    private void PullDown()
-    {
-        Vector3 dwn = transform.TransformDirection(Vector3.down);
-        RaycastHit hit;
-        //Debug.DrawRay(transform.position, dwn * 10f);
-        if (Physics.Raycast(Ray.transform.position, dwn, out hit, 5f))
-        {
-            transform.position = hit.point;
-        }
-    }
+    //private void PullDown()
+    //{
+    //    Vector3 dwn = transform.TransformDirection(Vector3.down);
+    //    RaycastHit hit;
+    //    //Debug.DrawRay(transform.position, dwn * 10f);
+    //    if (Physics.Raycast(Ray.transform.position, dwn, out hit, 5f))
+    //    {
+    //        transform.position = hit.point;
+    //    }
+    //}
 
     private void Moving()
     {
@@ -73,5 +73,21 @@ public class Player : Character
     private void RotateTowards(GameObject gameObject, Vector3 direction)
     {
         transform.rotation = Quaternion.LookRotation(direction);
+    }
+
+    public override void Attack()
+    {
+        base.Attack();
+        if (targetController != null && targetController.listEnemy.Count > 0)
+        {
+            attackTime = 3f;
+            StateMachine.ChangeState(AtkState);
+        }
+    }
+
+    public override void EndAttack()
+    {
+        base.EndAttack();
+        StateMachine.ChangeState(IdleState);
     }
 }
