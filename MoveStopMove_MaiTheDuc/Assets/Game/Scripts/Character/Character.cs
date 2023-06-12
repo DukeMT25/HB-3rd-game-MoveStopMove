@@ -67,9 +67,10 @@ public class Character : MonoBehaviour
     {
         if (targetController.TargetLock() != null)
         {
-            GameObject weaponObject = GameObject.Instantiate(Axe2);
+            GameObject weaponObject = Instantiate(Axe2);
             weaponObject.transform.position = weaponBase.transform.position;
             weaponObject.transform.rotation = weaponBase.transform.rotation;
+            //weaponObject.transform.Rotate(90, 0, 90);
 
             weaponObject.GetComponent<Weapon>().Shoot(targetController.TargetLock().transform);
         }

@@ -75,6 +75,16 @@ public class AI : Character
         base.Update();
     }
 
+    public override void Attack()
+    {
+        base.Attack();
+    }
+
+    public override void EndAttack()
+    {
+        base.EndAttack();
+    }
+
     protected override void OnDead(Character damageDealer)
     {
         base.OnDead(damageDealer);

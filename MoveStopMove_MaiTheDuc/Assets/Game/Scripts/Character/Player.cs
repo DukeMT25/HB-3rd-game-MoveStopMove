@@ -68,14 +68,11 @@ public class Player : Character
     public override void Attack()
     {
         base.Attack();
-        EndAttack();
     }
 
     public override void EndAttack()
     {
         base.EndAttack();
-        Debug.Log("Idle");
-        StateMachine.ChangeState(IdleState);
     }
 
     protected override void OnDead(Character damageDealer)

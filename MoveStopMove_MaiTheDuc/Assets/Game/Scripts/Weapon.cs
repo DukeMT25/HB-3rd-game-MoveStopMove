@@ -5,7 +5,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Weapon : MonoBehaviour
 {
-    public Transform _target;
+    Transform _target;
 
     public void Shoot(Transform target)
     {
