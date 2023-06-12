@@ -414,18 +414,6 @@
 "Assets/LeanTween/Framework/LTDescr.cs"
 "Assets/LeanTween/Framework/LTDescrOptional.cs"
 "Assets/LeanTween/Framework/LTSeq.cs"
-"Assets/Voxel Arsenal/Demo/Scripts/VoxelBeamScript.cs"
-"Assets/Voxel Arsenal/Demo/Scripts/VoxelButtonScript.cs"
-"Assets/Voxel Arsenal/Demo/Scripts/VoxelFireProjectile.cs"
-"Assets/Voxel Arsenal/Demo/Scripts/VoxelLoopScript.cs"
-"Assets/Voxel Arsenal/Demo/Scripts/VoxelOrbit.cs"
-"Assets/Voxel Arsenal/Demo/Scripts/VoxelProjectileScript.cs"
-"Assets/Voxel Arsenal/Demo/Scripts/VoxelSceneSelect.cs"
-"Assets/Voxel Arsenal/Demo/Scripts/VoxelTarget.cs"
-"Assets/Voxel Arsenal/Scripts/VoxelBeamStatic.cs"
-"Assets/Voxel Arsenal/Scripts/VoxelLightFade.cs"
-"Assets/Voxel Arsenal/Scripts/VoxelRotation.cs"
-"Assets/Voxel Arsenal/Scripts/VoxelSoundSpawn.cs"
 -langversion:9.0
 
 /deterministic
