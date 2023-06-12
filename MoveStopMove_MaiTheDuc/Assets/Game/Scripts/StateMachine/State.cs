@@ -22,9 +22,7 @@ public class State : MonoBehaviour
     }
 
     public virtual void Tick()
-    {
-
-    }
+    {}
 
     public virtual void Exit()
     {

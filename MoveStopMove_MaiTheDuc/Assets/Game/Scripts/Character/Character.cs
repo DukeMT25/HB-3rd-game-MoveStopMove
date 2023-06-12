@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    [SerializeField] protected Animator _anim;
+    [SerializeField] public Animator _anim;
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected SkinnedMeshRenderer _chaMesh;
     [SerializeField] protected SkinnedMeshRenderer _pant;
     [SerializeField] Transform weaponTrans;
     [SerializeField] Transform weaponBase;
-    [SerializeField] protected Target targetController;
+    [SerializeField] public Target targetController;
     [SerializeField] GameObject Axe2;
 
 
@@ -18,6 +18,8 @@ public class Character : MonoBehaviour
     public float attackTime = 3f;
 
     public StateMachine StateMachine { get; set; }
+    protected bool isDead;
+    public bool IsDead { get => isDead; set => isDead = value; }
 
     protected Vector3 startPosition;
 
@@ -30,20 +32,18 @@ public class Character : MonoBehaviour
 
     protected virtual void OnInit()
     {
-     
-        StateMachine = new StateMachine();
+        if (StateMachine == null)
+        {
+            StateMachine = new StateMachine();
+        }
 
         startPosition = transform.position;
     }
 
     protected virtual void Update()
     {
+        //if (StateMachine.CurrentState != null)
         StateMachine.CurrentState.Tick();
-        attackTime -= Time.deltaTime;
-        if (attackTime <= 0)
-        {
-            Attack();
-        }
     }
 
     public void SetPant(int pantId)
@@ -57,10 +57,9 @@ public class Character : MonoBehaviour
 
     public virtual void Attack()
     {
-        if(targetController != null && targetController.listEnemy.Count > 0)
+        if (targetController != null && targetController.listEnemy.Count > 0)
         {
-            attackTime = 3f;
-
+            ThrowWeapon();
         }
     }
 
@@ -80,5 +79,10 @@ public class Character : MonoBehaviour
     public virtual void EndAttack()
     {
         weaponTrans.gameObject.SetActive(true);
+    }
+
+    protected virtual void OnDead(Character damageDealer)
+    {
+        isDead = true;
     }
 }

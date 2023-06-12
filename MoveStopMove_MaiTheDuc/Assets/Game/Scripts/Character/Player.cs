@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 
 public class Player : Character
 {
@@ -16,13 +19,12 @@ public class Player : Character
 
     //Atk
     public P_Attack AtkState { get; set; }
-    private bool isAtk;
-    public bool IsAtk { get => isAtk; set => isAtk = value; }
 
     //Ulti
     public P_Ulti UltiState { get; set; }
-    private bool isUlti;
-    public bool IsUlti { get => isUlti; set => isUlti = value; }
+
+    //Dead
+    public P_Dead DeadState { get; set; }
 
 
     protected override void Start()
@@ -37,6 +39,7 @@ public class Player : Character
         IdleState = new P_Idle(this, _anim, Constraint.idleName, this);
         RunState = new P_Run(this, _anim, Constraint.runName, this);
         AtkState = new P_Attack(this, _anim, Constraint.atkName, this);
+        DeadState = new P_Dead(this, _anim, Constraint.deadName);
 
         StateMachine.Initialize(IdleState);
     }
@@ -45,23 +48,10 @@ public class Player : Character
     {
         base.Update();
         Moving();
-        //PullDown();
     }
-
-    //private void PullDown()
-    //{
-    //    Vector3 dwn = transform.TransformDirection(Vector3.down);
-    //    RaycastHit hit;
-    //    //Debug.DrawRay(transform.position, dwn * 10f);
-    //    if (Physics.Raycast(Ray.transform.position, dwn, out hit, 5f))
-    //    {
-    //        transform.position = hit.point;
-    //    }
-    //}
 
     private void Moving()
     {
-        //MoveDirection = new Vector3(_floatingJoystick.Horizontal, _rb.velocity.y, _floatingJoystick.Vertical) * moveSpeed * Time.deltaTime;
         MoveDirection = (Vector3.right * _floatingJoystick.Horizontal + Vector3.forward * _floatingJoystick.Vertical) * moveSpeed * Time.deltaTime;
         transform.position += MoveDirection;
         if (MoveDirection != Vector3.zero)
@@ -78,16 +68,24 @@ public class Player : Character
     public override void Attack()
     {
         base.Attack();
-        if (targetController != null && targetController.listEnemy.Count > 0)
-        {
-            attackTime = 3f;
-            StateMachine.ChangeState(AtkState);
-        }
+        EndAttack();
     }
 
     public override void EndAttack()
     {
         base.EndAttack();
+        Debug.Log("Idle");
         StateMachine.ChangeState(IdleState);
+    }
+
+    protected override void OnDead(Character damageDealer)
+    {
+        base.OnDead(damageDealer);
+
+        StateMachine.ChangeState(DeadState);
+        MoveDirection = Vector3.zero;
+
+        //UIManager.Instance.SwitchToRevivePanel();
+        //GameManager.Instance.GameOver();
     }
 }

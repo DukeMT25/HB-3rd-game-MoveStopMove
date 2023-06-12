@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Constraint : MonoBehaviour
 {
-    public static int danveName = Animator.StringToHash("Dance");
+    public static int danceName = Animator.StringToHash("Dance");
     public static int idleName = Animator.StringToHash("Idle");
     public static int runName = Animator.StringToHash("Run");
     public static int atkName = Animator.StringToHash("Attack");

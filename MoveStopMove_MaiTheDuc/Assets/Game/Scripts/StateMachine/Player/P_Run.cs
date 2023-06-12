@@ -2,13 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class P_Run : State
+public class P_Run : P_State
 {
-    private Player player;
-
     public P_Run(Character character, Animator anim, int animName, Player player) : base(character, anim, animName)
     {
-        this.player = player;
     }
 
     public override void Enter()
@@ -24,7 +21,7 @@ public class P_Run : State
     public override void Tick()
     {
         base.Tick();
-
+        player.attackTime = 2.5f;
         if (player.MoveDirection == Vector3.zero)
         {
             player.StateMachine.ChangeState(player.IdleState);
