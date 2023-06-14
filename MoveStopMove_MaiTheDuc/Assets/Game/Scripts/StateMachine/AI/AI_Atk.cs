@@ -27,6 +27,8 @@ public class AI_Atk : AI_State
     public override void Exit()
     {
         base.Exit();
+        _ai.EndAttack();
+        atked = true;
     }
 
     public override void Tick()
@@ -36,7 +38,7 @@ public class AI_Atk : AI_State
         if (_ai._anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.3 && atked == false)
         {
             _ai.Attack();
-            Debug.Log("atk");
+    
             atked = true;
         }
 

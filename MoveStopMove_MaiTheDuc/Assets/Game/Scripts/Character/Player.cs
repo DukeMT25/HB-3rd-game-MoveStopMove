@@ -75,14 +75,33 @@ public class Player : Character
         base.EndAttack();
     }
 
-    protected override void OnDead(Character damageDealer)
+    //protected override void OnDead(Character damageDealer)
+    //{
+    //    base.OnDead(damageDealer);
+
+    //    StateMachine.ChangeState(DeadState);
+    //    MoveDirection = Vector3.zero;
+
+    //    //UIManager.Instance.SwitchToRevivePanel();
+    //    //GameManager.Instance.GameOver();
+    //}
+    protected override void OnDead()
     {
-        base.OnDead(damageDealer);
+        base.OnDead();
 
         StateMachine.ChangeState(DeadState);
         MoveDirection = Vector3.zero;
 
         //UIManager.Instance.SwitchToRevivePanel();
         //GameManager.Instance.GameOver();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Weapon weapon = other.GetComponent<Weapon>();
+        if (weapon != null && weapon._character != this)
+        {
+            OnDead();
+        }
     }
 }

@@ -19,7 +19,8 @@ public class P_Attack : P_State
         if (player.targetController.listEnemy.Count > 0)
         {
             target = player.targetController.listEnemy[0];
-            player.transform.LookAt(target.transform.position);
+            player.transform.LookAt(target.transform.position); 
+            player.transform.rotation = Quaternion.identity;
         }
 
 
@@ -28,6 +29,8 @@ public class P_Attack : P_State
     public override void Exit()
     {
         base.Exit();
+        player.EndAttack();
+        atked = true;
     }
 
     public override void Tick()

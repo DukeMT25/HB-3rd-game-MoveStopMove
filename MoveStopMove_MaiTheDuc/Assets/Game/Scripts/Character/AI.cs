@@ -85,14 +85,24 @@ public class AI : Character
         base.EndAttack();
     }
 
-    protected override void OnDead(Character damageDealer)
+    protected override void OnDead()
     {
-        base.OnDead(damageDealer);
+        base.OnDead();
 
         ResetNavMesh();
         SetEnemyAsTarget(false);
         StateMachine.ChangeState(DeadState);
-        onAnyAIDead?.Invoke(this, new OnAnyAIDeadArgs { _ai = this, damageDealer = damageDealer });
+        //onAnyAIDead?.Invoke(this, new OnAnyAIDeadArgs { _ai = this, damageDealer = damageDealer });
+        onAnyAIDead?.Invoke(this, new OnAnyAIDeadArgs { _ai = this });
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Weapon weapon = other.GetComponent<Weapon>();
+        if (weapon != null && weapon._character != this)
+        {
+            OnDead();
+        }
     }
 
     public void SetDestination(Vector3 dest)

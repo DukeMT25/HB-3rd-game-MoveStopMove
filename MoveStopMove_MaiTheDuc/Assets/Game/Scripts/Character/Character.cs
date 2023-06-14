@@ -72,7 +72,7 @@ public class Character : MonoBehaviour
             weaponObject.transform.rotation = weaponBase.transform.rotation;
             //weaponObject.transform.Rotate(90, 0, 90);
 
-            weaponObject.GetComponent<Weapon>().Shoot(targetController.TargetLock().transform);
+            weaponObject.GetComponent<Weapon>().Shoot(targetController.TargetLock().transform, this);
         }
         weaponTrans.gameObject.SetActive(false);
     }
@@ -82,7 +82,7 @@ public class Character : MonoBehaviour
         weaponTrans.gameObject.SetActive(true);
     }
 
-    protected virtual void OnDead(Character damageDealer)
+    protected virtual void OnDead()
     {
         isDead = true;
     }
