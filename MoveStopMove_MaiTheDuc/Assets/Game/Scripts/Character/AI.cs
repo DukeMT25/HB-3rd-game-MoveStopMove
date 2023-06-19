@@ -37,7 +37,7 @@ public class AI : Character
 
     protected override void OnInit()
     {
-        base.OnInit();
+            base.OnInit();
 
         //IsPause = false;
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -80,11 +80,6 @@ public class AI : Character
         base.Attack();
     }
 
-    public override void EndAttack()
-    {
-        base.EndAttack();
-    }
-
     protected override void OnDead()
     {
         base.OnDead();
@@ -96,13 +91,9 @@ public class AI : Character
         onAnyAIDead?.Invoke(this, new OnAnyAIDeadArgs { _ai = this });
     }
 
-    private void OnTriggerEnter(Collider other)
+    public override void OnHit(float damage)
     {
-        Weapon weapon = other.GetComponent<Weapon>();
-        if (weapon != null && weapon._character != this)
-        {
-            OnDead();
-        }
+        base.OnHit(damage);
     }
 
     public void SetDestination(Vector3 dest)

@@ -27,7 +27,7 @@ public class AI_Atk : AI_State
     public override void Exit()
     {
         base.Exit();
-        _ai.EndAttack();
+        _ai.ShowWeaponInHand();
         atked = true;
     }
 
@@ -37,7 +37,7 @@ public class AI_Atk : AI_State
 
         if (_ai._anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.3 && atked == false)
         {
-            _ai.Attack();
+                _ai.Attack();
     
             atked = true;
         }
@@ -47,7 +47,7 @@ public class AI_Atk : AI_State
             _ai.attackTime = 3.5f;
             _ai.StateMachine.ChangeState(_ai.IdleState);
             atked = false;
-            _ai.EndAttack();
+            _ai.ShowWeaponInHand();
         }
 
         else if (_ai.targetController.listEnemy.Count == 0)

@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 8075868018502499727}
   - component: {fileID: 8075868018503466831}
   - component: {fileID: -6492159620142719207}
-  - component: {fileID: -7555879198229158934}
+  - component: {fileID: -3992163444987725754}
+  - component: {fileID: 5502998547354489062}
   m_Layer: 0
   m_Name: Axe_1
   m_TagString: Untagged
@@ -100,16 +101,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _character: {fileID: 0}
---- !u!135 &-7555879198229158934
-SphereCollider:
+--- !u!114 &-3992163444987725754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8075868018505458063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e01b6290e1fc6429227e20ef6fc390, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &5502998547354489062
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8075868018505458063}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.0154665075
+  m_Size: {x: 0.017188588, y: 0.030933015, z: 0.0032165153}
   m_Center: {x: -0.00004837196, y: -0.0009269321, z: 0}

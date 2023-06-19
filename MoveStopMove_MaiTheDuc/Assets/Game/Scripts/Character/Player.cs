@@ -10,7 +10,7 @@ public class Player : Character
 {
     [SerializeField] Rigidbody _rb;
     [SerializeField] FloatingJoystick _floatingJoystick;
-    [SerializeField] Transform Ray;
+    //[SerializeField] Transform Ray;
 
     public Vector3 MoveDirection { get; set; }
 
@@ -70,38 +70,19 @@ public class Player : Character
         base.Attack();
     }
 
-    public override void EndAttack()
-    {
-        base.EndAttack();
-    }
-
-    //protected override void OnDead(Character damageDealer)
-    //{
-    //    base.OnDead(damageDealer);
-
-    //    StateMachine.ChangeState(DeadState);
-    //    MoveDirection = Vector3.zero;
-
-    //    //UIManager.Instance.SwitchToRevivePanel();
-    //    //GameManager.Instance.GameOver();
-    //}
     protected override void OnDead()
     {
         base.OnDead();
 
-        StateMachine.ChangeState(DeadState);
         MoveDirection = Vector3.zero;
+        StateMachine.ChangeState(DeadState);
 
         //UIManager.Instance.SwitchToRevivePanel();
         //GameManager.Instance.GameOver();
     }
 
-    private void OnTriggerEnter(Collider other)
+    public override void OnHit(float damage)
     {
-        Weapon weapon = other.GetComponent<Weapon>();
-        if (weapon != null && weapon._character != this)
-        {
-            OnDead();
-        }
+        base.OnHit(damage);
     }
 }

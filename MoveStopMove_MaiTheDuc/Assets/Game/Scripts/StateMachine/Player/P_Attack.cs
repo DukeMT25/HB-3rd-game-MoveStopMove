@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class P_Attack : P_State
 {
@@ -19,8 +20,9 @@ public class P_Attack : P_State
         if (player.targetController.listEnemy.Count > 0)
         {
             target = player.targetController.listEnemy[0];
+
             player.transform.LookAt(target.transform.position); 
-            player.transform.rotation = Quaternion.identity;
+            //player.transform.rotation = Quaternion.identity;
         }
 
 
@@ -29,7 +31,7 @@ public class P_Attack : P_State
     public override void Exit()
     {
         base.Exit();
-        player.EndAttack();
+        player.ShowWeaponInHand();
         atked = true;
     }
 
@@ -52,7 +54,7 @@ public class P_Attack : P_State
             player.attackTime = 2.5f;
             player.StateMachine.ChangeState(player.IdleState);
             atked = false;
-            player.EndAttack();
+            player.ShowWeaponInHand();
         }
     }
 }

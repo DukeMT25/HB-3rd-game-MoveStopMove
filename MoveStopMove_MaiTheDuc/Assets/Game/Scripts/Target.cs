@@ -7,6 +7,11 @@ public class Target : MonoBehaviour
     public Character character;
     public List<Character> listEnemy = new List<Character>();
 
+    private void Update()
+    {
+        transform.rotation = Quaternion.identity;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         Character enemy = other.GetComponent<Character>();

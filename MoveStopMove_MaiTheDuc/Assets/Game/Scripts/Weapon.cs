@@ -15,7 +15,30 @@ public class Weapon : MonoBehaviour
         Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
         LeanTween.move(gameObject, targetPos, 0.5f).setOnComplete(() =>
         {
-            GameObject.Destroy(gameObject);
+            ReleaseWeapon();
         });
+    }
+
+    private void ReleaseWeapon()
+    {
+        gameObject.GetComponent<PooledObj>().Release();
+        _character.ShowWeaponInHand();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Character _target = other.GetComponent<Character>();
+        if (_target && _target != _character && other.gameObject != gameObject)
+        {
+            _target.OnHit(1f);
+            if (other.gameObject.GetComponent<Player>())
+            {
+                
+            }
+            else
+            {
+
+            }
+        }
     }
 }

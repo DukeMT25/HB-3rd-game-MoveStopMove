@@ -8,6 +8,15 @@ public class GameManager : Singleton<GameManager>
 {
     private GameState _state;
 
+    [SerializeField] GameObject weaponHolder;
+    [SerializeField] List<ObjectPool> weaponObjectPool;
+    [SerializeField] WeaponSpawner _weaponspawner;
+
+    public GameObject WeaponHolder { get => weaponHolder; set => weaponHolder = value; }
+    public List<ObjectPool> WeaponObjectPool { get => weaponObjectPool; set => weaponObjectPool = value; }
+    public WeaponSpawner Weaponspawner { get => _weaponspawner; set => _weaponspawner = value; }
+
+
     void Awake()
     {
         ChangeState(GameState.MainMenu);
