@@ -10,6 +10,4 @@ public class WeaponSpawner : PooledObj
         Weapon weapon = weaponPool.GetComponent<Weapon>();
         return weapon;
     }
-
-
 }

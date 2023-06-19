@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class AI_Dead : AI_State
 {
-    private float timer = 3f;
-
     public AI_Dead(Character character, Animator anim, int animName) : base(character, anim, animName)
     {
     }
@@ -24,11 +22,6 @@ public class AI_Dead : AI_State
     {
         base.Tick();
 
-        timer -= Time.deltaTime;
-
-        if (timer < 0f)
-        {
-            //_ai.ReleaseSelf();
-        }
+        if (_ai._anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f) _ai.gameObject.SetActive(false);
     }
 }

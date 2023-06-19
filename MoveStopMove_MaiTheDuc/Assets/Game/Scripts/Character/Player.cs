@@ -30,6 +30,16 @@ public class Player : Character
     protected override void Start()
     {
         base.Start();
+        OnInit();
+        AI.onAnyAIDead += AI_onAnyAIDead;
+    }
+
+    private void AI_onAnyAIDead(object sender, AI.OnAnyAIDeadArgs e)
+    {
+        if (targetController.listEnemy.Contains(e._ai))
+        {
+            targetController.listEnemy.Remove(e._ai);
+        }
     }
 
     protected override void OnInit()

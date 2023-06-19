@@ -15,7 +15,6 @@ public class Character : MonoBehaviour
     [SerializeField] Transform weaponStartPoint; // khi sinh vu lay toa  poss world
 
     public GameManager gameManager;
-    //public WeaponSpawner weaponSpawner;
 
     public List<Weapon> _listWeaponatk;
     public ObjectPool PoolObject { get; set; }
@@ -34,19 +33,14 @@ public class Character : MonoBehaviour
 
     protected Vector3 startPosition;
 
-    int weaponIndex;
-
-    public void Awake()
-    {
-        gameManager = GameManager.Instance;
-    }
+    public int weaponIndex;
 
     protected virtual void Start()
     {
+        gameManager = GameManager.Instance;
 
-        OnInit();
-
-        SetPant(Random.Range(0,9));
+        SetPant(Random.Range(0, 9));
+        //OnInit();
     }
 
     protected virtual void OnInit()
@@ -62,19 +56,20 @@ public class Character : MonoBehaviour
 
         //Tao Weapon in WeaponHolder...
         // lay Weapon Index; Get PLayerPref.....
-        weaponIndex = Random.Range(0, listWeaponsInHand.Count);
 
-        //int theIndex = Random.Range(0, listWeaponsInHand.Count);
+        weaponIndex = Random.Range(0, ListWeaponsInHand.Count);
+
+        ShowWeaponInHand();
         //Todo Show weapon In Hand ShowWeaponInHand(weaponIndex);
         //weaponSpawner.WeaponObjectPool = new List<ObjectPool>();
 
-        Debug.Log(weaponIndex);
+        ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
+        Debug.Log("Null");
+        Weapon weapon2 = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
 
-        ShowWeaponInHand();
         for (int i = 0; i < 2; i++)
         {
-            Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, gameManager.WeaponObjectPool[weaponIndex]);
-
+            Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
             _listWeaponatk.Add(weapon);
         }
 
@@ -96,7 +91,6 @@ public class Character : MonoBehaviour
 
     protected virtual void Update()
     {
-        //if (StateMachine.CurrentState != null)
         StateMachine.CurrentState.Tick();
     }
 
@@ -121,24 +115,19 @@ public class Character : MonoBehaviour
     {
         if (targetController.TargetLock() != null)
         {
-            //GameObject weaponObject = Instantiate(Axe2);
             Weapon weaponObject = _listWeaponatk[0];
             weaponObject.gameObject.SetActive(true);
             weaponObject.transform.position = weaponStartPoint.transform.position;
-            weaponObject.transform.rotation = weaponStartPoint.transform.rotation;
-            ////weaponObject.transform.Rotate(90, 0, 90);
 
             weaponObject.GetComponent<Weapon>().Shoot(targetController.TargetLock().transform, this);
 
             
         }
-        //hide weapon index in ListweaponInHand
-        //weaponTrans.gameObject.SetActive(false);
     }
 
     protected virtual void OnDead()
     {
-        //IsDead = true;
+        //gameObject.GetComponent<PooledObj>().Release();
     }
 
     public virtual void OnHit(float damage)
@@ -151,13 +140,6 @@ public class Character : MonoBehaviour
         //    //    _GameManager.SoundManager.PlayWeaponHitSoundEffect();
         //    //}
 
-        //    hp -= damage;
-        //    if (IsDead)
-        //    {
-        //        hp = 0;
-        //        OnDead();
-        //    }
-        //}
         hp -= damage;
         Debug.Log(hp);
         if (IsDead)

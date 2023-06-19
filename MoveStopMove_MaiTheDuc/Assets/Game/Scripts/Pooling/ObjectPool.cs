@@ -17,11 +17,15 @@ public class ObjectPool : MonoBehaviour
 
     public PooledObj ObjectToPool { get => objectToPool; set => objectToPool = value; }
     public uint InitPoolSize => initPoolSize;
-    private void Start()
-    {
 
+    private void Awake()
+    {
         SetupPool();
     }
+    //private void Start()
+    //{
+    //    SetupPool();
+    //}
 
     // creates the pool (invoke when the lag is not noticeable)
     private void SetupPool()

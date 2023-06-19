@@ -31,14 +31,15 @@ public class Weapon : MonoBehaviour
         if (_target && _target != _character && other.gameObject != gameObject)
         {
             _target.OnHit(1f);
-            if (other.gameObject.GetComponent<Player>())
-            {
+            //_character.targetController.listEnemy.RemoveAt(0);
+            //if (other.gameObject.GetComponent<Player>())
+            //{
                 
-            }
-            else
-            {
+            //}
+            //else
+            //{
 
-            }
+            //}
         }
     }
 }

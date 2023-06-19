@@ -19,7 +19,6 @@ public class AI : Character
     public float IdleTime => idleTime;
     [SerializeField] float patrolRadius = 7f;
     public float PatrolRadius => patrolRadius;
-    [SerializeField] GameObject targetVisual;
 
     public UnityEngine.AI.NavMeshAgent agent;
 
@@ -35,9 +34,15 @@ public class AI : Character
 
     #endregion
 
+    protected override void Start()
+    {
+        base.Start();
+        OnInit();
+    }
+
     protected override void OnInit()
     {
-            base.OnInit();
+        base.OnInit();
 
         //IsPause = false;
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -52,7 +57,6 @@ public class AI : Character
         #pragma warning restore
 
         StateMachine.Initialize(IdleState);
-        SetEnemyAsTarget(false);
     }
 
     //public override void OnNewGame()
@@ -62,11 +66,6 @@ public class AI : Character
     //    StateMachine.Initialize(IdleState);
 
     //}
-
-    protected override void Start()
-    {
-        base.Start();
-    }
 
     protected override void Update()
     {
@@ -85,9 +84,8 @@ public class AI : Character
         base.OnDead();
 
         ResetNavMesh();
-        SetEnemyAsTarget(false);
         StateMachine.ChangeState(DeadState);
-        //onAnyAIDead?.Invoke(this, new OnAnyAIDeadArgs { _ai = this, damageDealer = damageDealer });
+
         onAnyAIDead?.Invoke(this, new OnAnyAIDeadArgs { _ai = this });
     }
 
@@ -108,16 +106,4 @@ public class AI : Character
 
     public bool IsAtDestination() => !agent.pathPending && !agent.hasPath;
 
-    public void SetEnemyAsTarget(bool isTarget)
-    {
-        if (StateMachine.CurrentState == DeadState) return;
-        targetVisual.SetActive(isTarget);
-    }
-
-    //public override void ReleaseSelf()
-    //{
-    //    base.ReleaseSelf();
-
-    //    //IndicatorManager.Instance.RemoveIndicator(this);
-    //}
 }
