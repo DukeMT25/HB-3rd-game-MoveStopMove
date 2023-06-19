@@ -21,7 +21,7 @@ public class P_Run : P_State
     public override void Tick()
     {
         base.Tick();
-        player.attackTime = 2.5f;
+        player.attackTime = 0.1f;
         if (player.MoveDirection == Vector3.zero)
         {
             player.StateMachine.ChangeState(player.IdleState);

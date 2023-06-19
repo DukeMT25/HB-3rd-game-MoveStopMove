@@ -12,9 +12,18 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] WeaponSpawner _weaponspawner;
     [SerializeField] GameObject weaponHolder;
 
+    [SerializeField] List<ObjectPool> _aiObjectPool;
+    [SerializeField] AISpawner _aISpawner;
+    [SerializeField] GameObject aiHolder;
+
     public List<ObjectPool> WeaponObjectPool { get => weaponObjectPool; set => weaponObjectPool = value; }
     public WeaponSpawner Weaponspawner { get => _weaponspawner; set => _weaponspawner = value; }
     public GameObject WeaponHolder { get => weaponHolder; set => weaponHolder = value; }
+
+    public List<ObjectPool> AiObjectPool { get => _aiObjectPool; set => _aiObjectPool = value; }
+    public AISpawner AISpawner { get => _aISpawner; set => _aISpawner = value; }
+    public GameObject AiHolder { get => aiHolder; set => aiHolder = value; }
+
 
     void Awake()
     {

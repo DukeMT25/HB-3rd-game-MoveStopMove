@@ -20,7 +20,7 @@ public class Character : MonoBehaviour
     public ObjectPool PoolObject { get; set; }
 
     public List<Material> _listPantsMat;
-    public float attackTime = 3f;
+    public float attackTime = 0.5f;
 
     public StateMachine StateMachine { get; set; }
 
@@ -64,7 +64,7 @@ public class Character : MonoBehaviour
         //weaponSpawner.WeaponObjectPool = new List<ObjectPool>();
 
         ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
-        Debug.Log("Null");
+
         Weapon weapon2 = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
 
         for (int i = 0; i < 2; i++)
@@ -105,6 +105,7 @@ public class Character : MonoBehaviour
 
     public virtual void Attack()
     {
+        Debug.Log("attack");
         if (targetController != null && targetController.listEnemy.Count > 0)
         {
             ThrowWeapon();
@@ -113,8 +114,11 @@ public class Character : MonoBehaviour
 
     public void ThrowWeapon()
     {
+        Debug.Log("throw");
         if (targetController.TargetLock() != null)
         {
+            Debug.Log("throw success");
+
             Weapon weaponObject = _listWeaponatk[0];
             weaponObject.gameObject.SetActive(true);
             weaponObject.transform.position = weaponStartPoint.transform.position;

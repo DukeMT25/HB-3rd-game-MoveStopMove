@@ -32,7 +32,7 @@ public class P_Attack : P_State
     {
         base.Exit();
         player.ShowWeaponInHand();
-        atked = true;
+        atked = false;
     }
 
     public override void Tick()
@@ -51,7 +51,7 @@ public class P_Attack : P_State
 
         else if (player._anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
         {
-            player.attackTime = 2.5f;
+            player.attackTime = 0.1f;
             player.StateMachine.ChangeState(player.IdleState);
             atked = false;
             player.ShowWeaponInHand();

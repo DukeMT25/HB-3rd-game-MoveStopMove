@@ -358,6 +358,7 @@
 "Assets/Game/Joystick Pack/Scripts/Joysticks/FixedJoystick.cs"
 "Assets/Game/Joystick Pack/Scripts/Joysticks/FloatingJoystick.cs"
 "Assets/Game/Joystick Pack/Scripts/Joysticks/VariableJoystick.cs"
+"Assets/Game/Scripts/AISpawner.cs"
 "Assets/Game/Scripts/CameraFollow.cs"
 "Assets/Game/Scripts/Character/AI.cs"
 "Assets/Game/Scripts/Character/Character.cs"
