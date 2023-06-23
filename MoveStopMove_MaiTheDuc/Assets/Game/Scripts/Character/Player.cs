@@ -1,10 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
 
 public class Player : Character
 {
@@ -27,10 +21,10 @@ public class Player : Character
     public P_Dead DeadState { get; set; }
 
 
-    protected override void Start()
+    public override void Start()
     {
         base.Start();
-        OnInit();
+
         AI.onAnyAIDead += AI_onAnyAIDead;
     }
 
@@ -42,9 +36,23 @@ public class Player : Character
         }
     }
 
-    protected override void OnInit()
+    public override void OnInit()
     {
         base.OnInit();
+
+        weaponIndex = PlayerPrefs.GetInt("SelectedWeapon", 0);
+
+        ShowWeaponInHand();
+
+        ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
+
+        Weapon weapon2 = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
+
+        for (int i = 0; i < 2; i++)
+        {
+            Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
+            _listWeaponatk.Add(weapon);
+        }
 
         IdleState = new P_Idle(this, _anim, Constraint.idleName, this);
         RunState = new P_Run(this, _anim, Constraint.runName, this);

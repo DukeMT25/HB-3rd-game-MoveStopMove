@@ -35,15 +35,15 @@ public class Character : MonoBehaviour
 
     public int weaponIndex;
 
-    protected virtual void Start()
+    public virtual void Start()
     {
         gameManager = GameManager.Instance;
 
         SetPant(Random.Range(0, 9));
-        //OnInit();
+        OnInit();
     }
 
-    protected virtual void OnInit()
+    public virtual void OnInit()
     {
         if (StateMachine == null)
         {
@@ -53,26 +53,6 @@ public class Character : MonoBehaviour
         startPosition = transform.position;
 
         _listWeaponatk = new List<Weapon>();
-
-        //Tao Weapon in WeaponHolder...
-        // lay Weapon Index; Get PLayerPref.....
-
-        weaponIndex = Random.Range(0, ListWeaponsInHand.Count);
-
-        ShowWeaponInHand();
-        //Todo Show weapon In Hand ShowWeaponInHand(weaponIndex);
-        //weaponSpawner.WeaponObjectPool = new List<ObjectPool>();
-
-        ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
-
-        Weapon weapon2 = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
-
-        for (int i = 0; i < 2; i++)
-        {
-            Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
-            _listWeaponatk.Add(weapon);
-        }
-
     }
 
     public void HideAllWeapon()

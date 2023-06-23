@@ -34,10 +34,10 @@ public class AI : Character
 
     #endregion
 
-    protected override void Start()
+    public override void Start()
     {
         base.Start();
-        OnInit();
+
         AI.onAnyAIDead += AI_onAnyAIDead;
     }
 
@@ -49,9 +49,23 @@ public class AI : Character
         }
     }
 
-    protected override void OnInit()
+    public override void OnInit()
     {
         base.OnInit();
+
+        weaponIndex = UnityEngine.Random.Range(0, ListWeaponsInHand.Count);
+
+        ShowWeaponInHand();
+
+        ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
+
+        Weapon weapon2 = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
+
+        for (int i = 0; i < 2; i++)
+        {
+            Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
+            _listWeaponatk.Add(weapon);
+        }
 
         //IsPause = false;
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ public enum GameState { MainMenu, Gameplay, Finish }
 public class GameManager : Singleton<GameManager>
 {
     private GameState _state;
+
+    //public static event Action<GameState> OnGameStateChanged;
 
     [SerializeField] List<ObjectPool> weaponObjectPool;
     [SerializeField] WeaponSpawner _weaponspawner;
@@ -39,4 +42,28 @@ public class GameManager : Singleton<GameManager>
     {
         return _state == gameState;
     }
+
+    //private void Start()
+    //{
+    //    UpdateGameState(GameState.MainMenu);
+    //}
+
+    //public void UpdateGameState(GameState newState)
+    //{
+    //    _state = newState;
+
+    //    switch (newState)
+    //    {
+    //        case GameState.MainMenu:
+    //            break;
+    //        case GameState.Gameplay: break;
+    //        case GameState.Finish: break;
+    //        default: 
+    //            throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
+    //    }
+
+    //    OnGameStateChanged?.Invoke(newState);
+    //}    
+
+
 }
