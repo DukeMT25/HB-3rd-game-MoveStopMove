@@ -59,8 +59,6 @@ public class AI : Character
 
         ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
 
-        Weapon weapon2 = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
-
         for (int i = 0; i < 2; i++)
         {
             Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);

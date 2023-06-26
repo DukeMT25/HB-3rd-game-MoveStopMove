@@ -14,7 +14,7 @@ public class AI_Run : AI_State
 
         Vector3 targetPos = new Vector3(Random.Range(-25f, 25f), 0f, Random.Range(-25f, 25f));
         _ai.SetDestination(targetPos);
-        Debug.Log(targetPos);
+        //Debug.Log(targetPos);
 
     }
 

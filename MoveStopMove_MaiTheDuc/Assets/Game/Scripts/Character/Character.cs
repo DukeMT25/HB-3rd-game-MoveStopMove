@@ -63,7 +63,7 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void ShowWeaponInHand()
+    public virtual void ShowWeaponInHand()
     {
         HideAllWeapon();
         ListWeaponsInHand[weaponIndex].SetActive(true);
@@ -85,7 +85,6 @@ public class Character : MonoBehaviour
 
     public virtual void Attack()
     {
-        Debug.Log("attack");
         if (targetController != null && targetController.listEnemy.Count > 0)
         {
             ThrowWeapon();
@@ -94,11 +93,8 @@ public class Character : MonoBehaviour
 
     public void ThrowWeapon()
     {
-        Debug.Log("throw");
         if (targetController.TargetLock() != null)
         {
-            Debug.Log("throw success");
-
             Weapon weaponObject = _listWeaponatk[0];
             weaponObject.gameObject.SetActive(true);
             weaponObject.transform.position = weaponStartPoint.transform.position;
@@ -125,7 +121,7 @@ public class Character : MonoBehaviour
         //    //}
 
         hp -= damage;
-        Debug.Log(hp);
+
         if (IsDead)
         {
             OnDead();

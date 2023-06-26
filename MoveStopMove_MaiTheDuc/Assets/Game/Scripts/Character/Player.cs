@@ -40,19 +40,7 @@ public class Player : Character
     {
         base.OnInit();
 
-        weaponIndex = PlayerPrefs.GetInt("SelectedWeapon", 0);
-
-        ShowWeaponInHand();
-
-        ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
-
-        Weapon weapon2 = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
-
-        for (int i = 0; i < 2; i++)
-        {
-            Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
-            _listWeaponatk.Add(weapon);
-        }
+        UpdateWeapon();
 
         IdleState = new P_Idle(this, _anim, Constraint.idleName, this);
         RunState = new P_Run(this, _anim, Constraint.runName, this);
@@ -66,6 +54,34 @@ public class Player : Character
     {
         base.Update();
         Moving();
+    }
+
+    public void UpdateWeapon()
+    {
+        weaponIndex = PlayerPrefs.GetInt("SelectedWeapon");
+        Debug.Log(weaponIndex);
+        ShowWeaponInHand();
+
+        ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
+        ReleaseWeapon();
+        for (int i = 0; i < 2; i++)
+        {
+            Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
+            _listWeaponatk.Add(weapon);
+        }
+    }
+    private void ReleaseWeapon()
+    {
+        for (int i = 0; i < _listWeaponatk.Count; i++)
+        {
+            _listWeaponatk[i].GetComponent<PooledObj>().Release();
+        }
+        _listWeaponatk.Clear();
+    }    
+    public override void ShowWeaponInHand()
+    {
+        HideAllWeapon();
+        ListWeaponsInHand[weaponIndex].SetActive(true);
     }
 
     private void Moving()
