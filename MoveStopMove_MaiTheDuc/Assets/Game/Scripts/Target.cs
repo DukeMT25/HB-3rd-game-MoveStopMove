@@ -15,7 +15,7 @@ public class Target : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Character enemy = other.GetComponent<Character>();
-        if(enemy != character && enemy != null  && !listEnemy.Contains(enemy))
+        if(enemy != character && enemy != null  && !listEnemy.Contains(enemy) && !enemy.IsDead)
         {
             listEnemy.Add(enemy);
         }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Player : Character
@@ -20,20 +21,17 @@ public class Player : Character
     //Dead
     public P_Dead DeadState { get; set; }
 
+    //AI dead
+    public static event EventHandler<OnAnyAIDeadArgs> onAnyAIDead;
+    public class OnAnyAIDeadArgs : EventArgs
+    {
+        public AI _ai;
+        public Character damageDealer;
+    }
 
     public override void Start()
     {
         base.Start();
-
-        AI.onAnyAIDead += AI_onAnyAIDead;
-    }
-
-    private void AI_onAnyAIDead(object sender, AI.OnAnyAIDeadArgs e)
-    {
-        if (targetController.listEnemy.Contains(e._ai))
-        {
-            targetController.listEnemy.Remove(e._ai);
-        }
     }
 
     public override void OnInit()
@@ -48,6 +46,16 @@ public class Player : Character
         DeadState = new P_Dead(this, _anim, Constraint.deadName);
 
         StateMachine.Initialize(IdleState);
+
+        AI.onAnyAIDead += AI_onAnyAIDead;
+    }
+
+    private void AI_onAnyAIDead(object sender, AI.OnAnyAIDeadArgs e)
+    {
+        if (targetController.listEnemy.Contains(e._ai))
+        {
+            targetController.listEnemy.Remove(e._ai);
+        }
     }
 
     protected override void Update()
@@ -59,7 +67,7 @@ public class Player : Character
     public void UpdateWeapon()
     {
         weaponIndex = PlayerPrefs.GetInt("SelectedWeapon");
-        Debug.Log(weaponIndex);
+        //Debug.Log(weaponIndex);
         ShowWeaponInHand();
 
         ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
@@ -87,12 +95,29 @@ public class Player : Character
     private void Moving()
     {
         MoveDirection = (Vector3.right * _floatingJoystick.Horizontal + Vector3.forward * _floatingJoystick.Vertical) * moveSpeed * Time.deltaTime;
+
         transform.position += MoveDirection;
+        //Vector3 nextPoint = MoveDirection;
+        //transform.position += CheckGround(nextPoint);
+
         if (MoveDirection != Vector3.zero)
         {
             RotateTowards(gameObject, MoveDirection);
         }
     }
+
+
+    //[SerializeField] LayerMask groundLayer;
+    //public Vector3 CheckGround(Vector3 nextPoint)
+    //{
+    //    RaycastHit hit;
+    //    if (Physics.Raycast(transform.position, Vector3.down, out hit, 2f, groundLayer))
+    //    {
+    //        return Vector3.zero;
+    //    }
+
+    //    return transform.position;
+    //}
 
     private void RotateTowards(GameObject gameObject, Vector3 direction)
     {
@@ -104,10 +129,8 @@ public class Player : Character
         base.Attack();
     }
 
-    protected override void OnDead()
+    public override void OnDespawn()
     {
-        base.OnDead();
-
         MoveDirection = Vector3.zero;
         StateMachine.ChangeState(DeadState);
 

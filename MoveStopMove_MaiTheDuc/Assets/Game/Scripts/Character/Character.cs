@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Search;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+public class Character : GameUnit
 {
     [SerializeField] public Animator _anim;
     [SerializeField] protected float moveSpeed;
@@ -25,7 +26,7 @@ public class Character : MonoBehaviour
     public StateMachine StateMachine { get; set; }
 
     public float hp = 1f;
-    //protected bool isDead;
+
     public bool IsDead => hp <= 0;
 
     public Transform WeaponStartPoint { get => weaponStartPoint; set => weaponStartPoint = value; }
@@ -39,11 +40,11 @@ public class Character : MonoBehaviour
     {
         gameManager = GameManager.Instance;
 
-        SetPant(Random.Range(0, 9));
+        SetPant(UnityEngine.Random.Range(0, 9));
         OnInit();
     }
 
-    public virtual void OnInit()
+    public override void OnInit()
     {
         if (StateMachine == null)
         {
@@ -105,11 +106,6 @@ public class Character : MonoBehaviour
         }
     }
 
-    protected virtual void OnDead()
-    {
-        //gameObject.GetComponent<PooledObj>().Release();
-    }
-
     public virtual void OnHit(float damage)
     {
 
@@ -124,7 +120,12 @@ public class Character : MonoBehaviour
 
         if (IsDead)
         {
-            OnDead();
+            OnDespawn();
         }
+    }
+
+    public override void OnDespawn()
+    {
+        throw new NotImplementedException();
     }
 }

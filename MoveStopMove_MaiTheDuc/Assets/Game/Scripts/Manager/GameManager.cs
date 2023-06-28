@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.XR;
 
 public enum GameState { MainMenu, Gameplay, Finish }
 
@@ -42,28 +44,5 @@ public class GameManager : Singleton<GameManager>
     {
         return _state == gameState;
     }
-
-    //private void Start()
-    //{
-    //    UpdateGameState(GameState.MainMenu);
-    //}
-
-    //public void UpdateGameState(GameState newState)
-    //{
-    //    _state = newState;
-
-    //    switch (newState)
-    //    {
-    //        case GameState.MainMenu:
-    //            break;
-    //        case GameState.Gameplay: break;
-    //        case GameState.Finish: break;
-    //        default: 
-    //            throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
-    //    }
-
-    //    OnGameStateChanged?.Invoke(newState);
-    //}    
-
 
 }

@@ -1,19 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class AI : Character
 {
-    public static event EventHandler<OnAnyAIDeadArgs> onAnyAIDead;
-    public class OnAnyAIDeadArgs : EventArgs
-    {
-        public AI _ai;
-        public Character damageDealer;
-    }
-
-
     [Space, Header("AI Info")]
     [SerializeField] float idleTime = 3f;
     public float IdleTime => idleTime;
@@ -34,11 +27,18 @@ public class AI : Character
 
     #endregion
 
+    public static event EventHandler<OnAnyAIDeadArgs> onAnyAIDead;
+    public class OnAnyAIDeadArgs : EventArgs
+    {
+        public AI _ai;
+        public Character damageDealer;
+    }
+
     public override void Start()
     {
         base.Start();
 
-        AI.onAnyAIDead += AI_onAnyAIDead;
+        onAnyAIDead += AI_onAnyAIDead;
     }
 
     private void AI_onAnyAIDead(object sender, AI.OnAnyAIDeadArgs e)
@@ -80,18 +80,8 @@ public class AI : Character
         StateMachine.Initialize(IdleState);
     }
 
-    //public override void OnNewGame()
-    //{
-    //    base.OnNewGame();
-
-    //    StateMachine.Initialize(IdleState);
-
-    //}
-
     protected override void Update()
     {
-        //if (IsPause) return;
-
         base.Update();
     }
 
@@ -100,13 +90,14 @@ public class AI : Character
         base.Attack();
     }
 
-    protected override void OnDead()
+    BotPool BotPool;
+    public override void OnDespawn()
     {
-        base.OnDead();
+        base.OnDespawn();
 
         ResetNavMesh();
         StateMachine.ChangeState(DeadState);
-
+        BotPool.RemoveBot(this);
         onAnyAIDead?.Invoke(this, new OnAnyAIDeadArgs { _ai = this });
     }
 
@@ -126,5 +117,4 @@ public class AI : Character
     }
 
     public bool IsAtDestination() => !agent.pathPending && !agent.hasPath;
-
 }
