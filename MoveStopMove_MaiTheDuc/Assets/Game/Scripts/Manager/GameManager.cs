@@ -11,7 +11,7 @@ public class GameManager : Singleton<GameManager>
 {
     private GameState _state;
 
-    //public static event Action<GameState> OnGameStateChanged;
+    [SerializeField] private Player player;
 
     [SerializeField] List<ObjectPool> weaponObjectPool;
     [SerializeField] WeaponSpawner _weaponspawner;
@@ -45,4 +45,8 @@ public class GameManager : Singleton<GameManager>
         return _state == gameState;
     }
 
+    public Player Player()
+    {
+        return player;
+    }
 }

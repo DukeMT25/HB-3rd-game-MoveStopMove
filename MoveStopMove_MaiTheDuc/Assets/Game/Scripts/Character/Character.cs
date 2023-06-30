@@ -26,13 +26,14 @@ public class Character : GameUnit
     public StateMachine StateMachine { get; set; }
 
     public float hp = 1f;
-
     public bool IsDead => hp <= 0;
+
+    //STAT
+    private float inGameAttackRange = 7.0f;
 
     public Transform WeaponStartPoint { get => weaponStartPoint; set => weaponStartPoint = value; }
     public List<GameObject> ListWeaponsInHand { get => listWeaponsInHand; set => listWeaponsInHand = value; }
-
-    protected Vector3 startPosition;
+    public float InGameAttackRange { get => inGameAttackRange; set => inGameAttackRange = value; }
 
     public int weaponIndex;
 
@@ -50,8 +51,6 @@ public class Character : GameUnit
         {
             StateMachine = new StateMachine();
         }
-
-        startPosition = transform.position;
 
         _listWeaponatk = new List<Weapon>();
     }
@@ -72,7 +71,8 @@ public class Character : GameUnit
 
     protected virtual void Update()
     {
-        StateMachine.CurrentState.Tick();
+        if (transform != null)
+            StateMachine.CurrentState.Tick();
     }
 
     public void SetPant(int pantId)

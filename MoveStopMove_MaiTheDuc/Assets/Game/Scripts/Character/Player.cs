@@ -21,14 +21,6 @@ public class Player : Character
     //Dead
     public P_Dead DeadState { get; set; }
 
-    //AI dead
-    public static event EventHandler<OnAnyAIDeadArgs> onAnyAIDead;
-    public class OnAnyAIDeadArgs : EventArgs
-    {
-        public AI _ai;
-        public Character damageDealer;
-    }
-
     public override void Start()
     {
         base.Start();
@@ -70,13 +62,13 @@ public class Player : Character
         //Debug.Log(weaponIndex);
         ShowWeaponInHand();
 
-        ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
+        //ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
         ReleaseWeapon();
-        for (int i = 0; i < 2; i++)
-        {
-            Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
-            _listWeaponatk.Add(weapon);
-        }
+        //for (int i = 0; i < 2; i++)
+        //{
+        //    Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
+        //    _listWeaponatk.Add(weapon);
+        //}
     }
     private void ReleaseWeapon()
     {
@@ -141,5 +133,10 @@ public class Player : Character
     public override void OnHit(float damage)
     {
         base.OnHit(damage);
+    }
+
+    public void SetTransformPosition(Transform transform)
+    {
+        gameObject.transform.position = transform.position;
     }
 }

@@ -362,6 +362,7 @@
 "Assets/Game/Scripts/CameraFollow.cs"
 "Assets/Game/Scripts/Character/AI.cs"
 "Assets/Game/Scripts/Character/Character.cs"
+"Assets/Game/Scripts/Character/CharacterInfo.cs"
 "Assets/Game/Scripts/Character/Player.cs"
 "Assets/Game/Scripts/Constraint.cs"
 "Assets/Game/Scripts/DataType.cs"

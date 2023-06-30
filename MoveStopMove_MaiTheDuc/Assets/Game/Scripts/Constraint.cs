@@ -12,6 +12,16 @@ public class Constraint : MonoBehaviour
     public static int ultiName = Animator.StringToHash("Ulti");
     public static int winName = Animator.StringToHash("Win");
     public static int deadName = Animator.StringToHash("Dead");
+
+    public const string LEVEL = "Level";
+
+    public static bool IsDes(Vector3 a, Vector3 b, float range)
+    {
+
+        float distance = Vector3.Distance(a, b);
+        return distance < range;
+    }
+
     public static string GetStreamingAssetsPath(string fileName)
     {
         string dbPath;

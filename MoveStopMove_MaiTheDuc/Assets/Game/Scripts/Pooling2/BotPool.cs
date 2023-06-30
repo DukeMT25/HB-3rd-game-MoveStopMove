@@ -10,12 +10,12 @@ public class BotPool : MonoBehaviour
 
     private void Start()
     {
-        SpawnAI();
+        //SpawnAI();
     }
 
     private void Update()
     {
-        //if 
+        SpawnAI();
     }
 
     public void SpawnAI()
