@@ -18,7 +18,6 @@ public class Character : GameUnit
     public GameManager gameManager;
 
     public List<Weapon> _listWeaponatk;
-    public ObjectPool PoolObject { get; set; }
 
     public List<Material> _listPantsMat;
     public float attackTime = 0.5f;
@@ -69,6 +68,11 @@ public class Character : GameUnit
         ListWeaponsInHand[weaponIndex].SetActive(true);
     }
 
+    public Weapon GetWeaponInHand()
+    {
+        return ListWeaponsInHand[weaponIndex].gameObject.GetComponent<Weapon>();
+    }
+
     protected virtual void Update()
     {
         if (transform != null)
@@ -77,7 +81,7 @@ public class Character : GameUnit
 
     public void SetPant(int pantId)
     {
-        if(pantId < _listPantsMat.Count)
+        if (pantId < _listPantsMat.Count)
         {
             _chaMesh.material = _listPantsMat[pantId];
             _pant.material = _listPantsMat[pantId];
@@ -96,13 +100,13 @@ public class Character : GameUnit
     {
         if (targetController.TargetLock() != null)
         {
-            Weapon weaponObject = _listWeaponatk[0];
+            Weapon weaponObject = GetWeaponInHand();
             weaponObject.gameObject.SetActive(true);
             weaponObject.transform.position = weaponStartPoint.transform.position;
 
             weaponObject.GetComponent<Weapon>().Shoot(targetController.TargetLock().transform, this);
 
-            
+
         }
     }
 

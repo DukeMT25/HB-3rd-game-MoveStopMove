@@ -57,25 +57,25 @@ public class AI : Character
 
         ShowWeaponInHand();
 
-        ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
+            //ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
 
-        for (int i = 0; i < 2; i++)
-        {
-            Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
-            _listWeaponatk.Add(weapon);
-        }
+            //for (int i = 0; i < 2; i++)
+            //{
+            //    Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
+            //    _listWeaponatk.Add(weapon);
+            //}
 
         //IsPause = false;
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
         //IndicatorManager.Instance.CreateNewIndicator(this);
 
-        #pragma warning disable
+#pragma warning disable
         IdleState = new AI_Idle(this, _anim, Constraint.idleName);
         RunState = new AI_Run(this, _anim, Constraint.runName);
         AttackState = new AI_Atk(this, _anim, Constraint.atkName);
         DeadState = new AI_Dead(this, _anim, Constraint.deadName);
-        #pragma warning restore
+#pragma warning restore
 
         StateMachine.Initialize(IdleState);
     }

@@ -25,7 +25,7 @@ public class Weapon : MonoBehaviour
 
     private void ReleaseWeapon()
     {
-        gameObject.GetComponent<PooledObj>().Release();
+
         _character.ShowWeaponInHand();
     }
 

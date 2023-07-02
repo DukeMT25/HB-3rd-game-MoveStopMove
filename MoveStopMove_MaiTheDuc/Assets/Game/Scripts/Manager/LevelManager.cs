@@ -77,11 +77,8 @@ public class LevelManager : Singleton<LevelManager>
     public void OnInit()
     {
         player.OnInit();
-        Debug.Log(levelIndex);
         botAmount = levels[levelIndex].GetBotAmount();
-        Debug.Log(botAmount.ToString());
         botInGame = levels[levelIndex].GetBotInGame();
-        Debug.Log(botInGame.ToString());
         GenerateBotAI(botAmount, GeneratePoolObjectPosition(transform.position, node));
         player.transform.position = levels[levelIndex].GetStartPoint().position;
     }

@@ -72,12 +72,8 @@ public class Player : Character
     }
     private void ReleaseWeapon()
     {
-        for (int i = 0; i < _listWeaponatk.Count; i++)
-        {
-            _listWeaponatk[i].GetComponent<PooledObj>().Release();
-        }
-        _listWeaponatk.Clear();
-    }    
+
+    }
     public override void ShowWeaponInHand()
     {
         HideAllWeapon();
