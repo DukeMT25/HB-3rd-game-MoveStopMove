@@ -1,21 +1,16 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class AI : Character
 {
     [Space, Header("AI Info")]
-    [SerializeField] float idleTime = 3f;
+    [SerializeField] float idleTime = 1.5f;
     public float IdleTime => idleTime;
     [SerializeField] float patrolRadius = 7f;
     public float PatrolRadius => patrolRadius;
 
-    public UnityEngine.AI.NavMeshAgent agent;
-
-    public bool IsPause { get; set; }
+    public NavMeshAgent agent;
 
 
     #region States
@@ -52,23 +47,17 @@ public class AI : Character
     public override void OnInit()
     {
         base.OnInit();
+        Indicator.SetName(Constraint.GetRandomName());
+
+        hp = 1;
+        Exp = UnityEngine.Random.Range(1, 13);
+        RandomLevel(Exp);
 
         weaponIndex = UnityEngine.Random.Range(0, ListWeaponsInHand.Count);
 
         ShowWeaponInHand();
 
-            //ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
-
-            //for (int i = 0; i < 2; i++)
-            //{
-            //    Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
-            //    _listWeaponatk.Add(weapon);
-            //}
-
-        //IsPause = false;
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-
-        //IndicatorManager.Instance.CreateNewIndicator(this);
+        agent = GetComponent<NavMeshAgent>();
 
 #pragma warning disable
         IdleState = new AI_Idle(this, _anim, Constraint.idleName);
@@ -80,30 +69,42 @@ public class AI : Character
         StateMachine.Initialize(IdleState);
     }
 
+    private void RandomLevel(int lv)
+    {
+        transform.localScale = Vector3.one;
+        if (Exp >= 2)
+        {
+            transform.localScale *= 1.2f;
+        }
+        if (Exp >= 7)
+        {
+            transform.localScale *= 1.4f;
+        }
+        if (Exp >= 12)
+        {
+            transform.localScale *= 1.1f;
+        }
+
+        Indicator.SetScore(lv);
+    }
+
     protected override void Update()
     {
-        base.Update();
+        if (GameManager.Instance.IsState(GameState.Gameplay))
+        {
+            base.Update();
+        }
     }
 
-    public override void Attack()
-    {
-        base.Attack();
-    }
-
-    BotPool BotPool;
     public override void OnDespawn()
     {
-        base.OnDespawn();
-
         ResetNavMesh();
-        StateMachine.ChangeState(DeadState);
-        BotPool.RemoveBot(this);
-        onAnyAIDead?.Invoke(this, new OnAnyAIDeadArgs { _ai = this });
-    }
 
-    public override void OnHit(float damage)
-    {
-        base.OnHit(damage);
+        onAnyAIDead?.Invoke(this, new OnAnyAIDeadArgs { _ai = this });
+        StateMachine.ChangeState(DeadState);
+
+        Indicator.OnDespawn();
+        levelManager.Bots.Remove(this);
     }
 
     public void SetDestination(Vector3 dest)

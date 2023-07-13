@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Constraint : MonoBehaviour
@@ -13,7 +15,64 @@ public class Constraint : MonoBehaviour
     public static int winName = Animator.StringToHash("Win");
     public static int deadName = Animator.StringToHash("Dead");
 
+    public const string SELECTED_WEAPON = "SelectedWeapon";
+    public const string COIN = "Coin";
+
     public const string LEVEL = "Level";
+    public const string LAYOUT_WALL = "Wall";
+    public const float RAYCAST_HIT_RANGE_WALL = 1.0f;
+
+    private static List<string> names = new List<string>()
+    {
+        "Ailen",
+        "Lakshmana",
+        "Æthelthryth",
+        "Fido",
+        "Kajal",
+        "Ankur",
+        "Chelsea",
+        "Sulaiman",
+        "Yarognev",
+        "Faustina",
+        "Ferkó",
+        "Séraphine",
+        "Zhaleh",
+        "Bojana",
+        "Nancy",
+        "Madhukar",
+        "Vimal",
+        "Quinctilianus",
+        "Mahine",
+        "Lacie",
+    };
+
+    public static List<string> GetNames(int amount)
+    {
+        var list = names.OrderBy(d => System.Guid.NewGuid());
+        return list.Take(amount).ToList();
+    }
+
+    public static string GetRandomName()
+    {
+        return names[Random.Range(0, names.Count)];
+    }
+
+    public static bool isWall(GameObject a, LayerMask _layerMask)
+    {
+        RaycastHit hit;
+        bool isWall = false;
+        if (Physics.Raycast(a.transform.position, a.transform.TransformDirection(Vector3.forward), out hit, Constraint.RAYCAST_HIT_RANGE_WALL, _layerMask))
+        {
+            isWall = true;
+            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.red);
+        }
+        else
+        {
+            isWall = false;
+            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
+        }
+        return isWall;
+    }
 
     public static bool IsDes(Vector3 a, Vector3 b, float range)
     {

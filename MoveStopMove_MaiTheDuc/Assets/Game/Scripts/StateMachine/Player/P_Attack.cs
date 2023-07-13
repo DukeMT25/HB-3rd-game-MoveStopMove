@@ -22,9 +22,7 @@ public class P_Attack : P_State
             target = player.targetController.listEnemy[0];
 
             player.transform.LookAt(target.transform.position); 
-            //player.transform.rotation = Quaternion.identity;
         }
-
 
     }
 
@@ -43,7 +41,7 @@ public class P_Attack : P_State
             player.StateMachine.ChangeState(player.RunState);
         }
 
-        if (player._anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.3 && atked == false)
+        if (player._anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.4 && atked == false)
         {
             player.Attack();
             atked = true;
@@ -51,7 +49,7 @@ public class P_Attack : P_State
 
         else if (player._anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
         {
-            player.attackTime = 0.1f;
+            player.attackTime = 1f;
             player.StateMachine.ChangeState(player.IdleState);
             atked = false;
             player.ShowWeaponInHand();

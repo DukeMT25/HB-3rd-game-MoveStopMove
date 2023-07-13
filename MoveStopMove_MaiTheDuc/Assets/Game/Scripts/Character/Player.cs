@@ -3,10 +3,8 @@ using UnityEngine;
 
 public class Player : Character
 {
-    [SerializeField] Rigidbody _rb;
-    [SerializeField] FloatingJoystick _floatingJoystick;
-    //[SerializeField] Transform Ray;
-
+    [SerializeField] private int coin;
+    [SerializeField] private CameraFollow cam;
     public Vector3 MoveDirection { get; set; }
 
     public P_Idle IdleState { get; set; }
@@ -14,12 +12,19 @@ public class Player : Character
 
     //Atk
     public P_Attack AtkState { get; set; }
-
     //Ulti
     public P_Ulti UltiState { get; set; }
-
     //Dead
     public P_Dead DeadState { get; set; }
+    //Dance
+    public P_Dance DanceState { get; set; }
+
+    public int Coin { get => coin; set => coin = value; }
+
+    private void Awake()
+    {
+        Coin = PlayerPrefs.GetInt(Constraint.COIN, 10000);
+    }
 
     public override void Start()
     {
@@ -30,12 +35,22 @@ public class Player : Character
     {
         base.OnInit();
 
+        Indicator.SetName("You");
+
+        attackTime = 0.3f; 
+
         UpdateWeapon();
+        hp = 1;
+        Exp = 0;
+
+        transform.localScale = Vector3.one;
+        cam.transform.position = new Vector3(0, 10, -9.6f);
 
         IdleState = new P_Idle(this, _anim, Constraint.idleName, this);
         RunState = new P_Run(this, _anim, Constraint.runName, this);
         AtkState = new P_Attack(this, _anim, Constraint.atkName, this);
         DeadState = new P_Dead(this, _anim, Constraint.deadName);
+        DanceState = new P_Dance(this, _anim, Constraint.danceName);
 
         StateMachine.Initialize(IdleState);
 
@@ -52,41 +67,55 @@ public class Player : Character
 
     protected override void Update()
     {
-        base.Update();
-        Moving();
+        if (GameManager.Instance.IsState(GameState.Gameplay))
+        {
+            base.Update();
+            Moving();
+        }
+    }
+
+    public override void LevelUp()
+    {
+        base.LevelUp();
+
+        if (Exp == 2)
+        {
+            cam.Higher(3f);
+        }
+        else if (Exp == 7)
+        {
+            cam.Higher(4f);
+        }
+        else if (Exp == 12)
+        {
+            cam.Higher(5f);
+        }
+
+        if (Exp >= 18)
+        {
+            levelManager.OnFinish();
+
+            StateMachine.ChangeState(DanceState);
+            UIManager.Instance.OpenUI<Win>();
+        }
     }
 
     public void UpdateWeapon()
     {
-        weaponIndex = PlayerPrefs.GetInt("SelectedWeapon");
+        //weaponIndex = PlayerPrefs.GetInt("SelectedWeapon");
+        weaponIndex = PlayerPrefs.GetInt(Constraint.SELECTED_WEAPON);
         //Debug.Log(weaponIndex);
         ShowWeaponInHand();
-
-        //ObjectPool objpool = gameManager.WeaponObjectPool[weaponIndex];
-        ReleaseWeapon();
-        //for (int i = 0; i < 2; i++)
-        //{
-        //    Weapon weapon = gameManager.Weaponspawner.SpawnWeapon(gameManager.WeaponHolder, objpool);
-        //    _listWeaponatk.Add(weapon);
-        //}
-    }
-    private void ReleaseWeapon()
-    {
-
-    }
-    public override void ShowWeaponInHand()
-    {
-        HideAllWeapon();
-        ListWeaponsInHand[weaponIndex].SetActive(true);
     }
 
     private void Moving()
     {
-        MoveDirection = (Vector3.right * _floatingJoystick.Horizontal + Vector3.forward * _floatingJoystick.Vertical) * moveSpeed * Time.deltaTime;
+        MoveDirection = (Vector3.right * FloatingJoystick.Horizontal + Vector3.forward * FloatingJoystick.Vertical) * moveSpeed * Time.deltaTime;
 
-        transform.position += MoveDirection;
-        //Vector3 nextPoint = MoveDirection;
-        //transform.position += CheckGround(nextPoint);
+        if (!Constraint.isWall(this.gameObject, LayerMask.GetMask(Constraint.LAYOUT_WALL)) && !IsDead)
+        {
+            transform.position += MoveDirection;
+        }
 
         if (MoveDirection != Vector3.zero)
         {
@@ -94,27 +123,9 @@ public class Player : Character
         }
     }
 
-
-    //[SerializeField] LayerMask groundLayer;
-    //public Vector3 CheckGround(Vector3 nextPoint)
-    //{
-    //    RaycastHit hit;
-    //    if (Physics.Raycast(transform.position, Vector3.down, out hit, 2f, groundLayer))
-    //    {
-    //        return Vector3.zero;
-    //    }
-
-    //    return transform.position;
-    //}
-
     private void RotateTowards(GameObject gameObject, Vector3 direction)
     {
         transform.rotation = Quaternion.LookRotation(direction);
-    }
-
-    public override void Attack()
-    {
-        base.Attack();
     }
 
     public override void OnDespawn()
@@ -122,13 +133,8 @@ public class Player : Character
         MoveDirection = Vector3.zero;
         StateMachine.ChangeState(DeadState);
 
-        //UIManager.Instance.SwitchToRevivePanel();
-        //GameManager.Instance.GameOver();
-    }
-
-    public override void OnHit(float damage)
-    {
-        base.OnHit(damage);
+        UIManager.Instance.CloseUI<InGame>();
+        UIManager.Instance.OpenUI<Revive>();
     }
 
     public void SetTransformPosition(Transform transform)

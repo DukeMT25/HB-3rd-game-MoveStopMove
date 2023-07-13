@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3323882643397928972}
   - component: {fileID: 3323882643396799180}
   - component: {fileID: 1478371677586955677}
-  - component: {fileID: 7022614453798376180}
   - component: {fileID: 4677623780972328873}
   m_Layer: 0
   m_Name: Axe_0 (1)
@@ -99,19 +98,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 740c48ffdbf6af442b0e3bee52402fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _character: {fileID: 0}
---- !u!114 &7022614453798376180
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3323882643398997004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45e01b6290e1fc6429227e20ef6fc390, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  poolType: 2
+  _weaponType: 0
+  Select: 0
+  Equipped: 0
+  Buyed: 0
 --- !u!65 &4677623780972328873
 BoxCollider:
   m_ObjectHideFlags: 0

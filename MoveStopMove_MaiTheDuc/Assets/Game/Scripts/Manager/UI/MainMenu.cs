@@ -1,17 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class MainMenu : View
+public class MainMenu : UICanvas
 {
-    [SerializeField] private Button _weaponButton;
-    [SerializeField] private Button _playButton;
-
-    public override void Initialize()
+    public void PlayButton()
     {
-        _weaponButton.onClick.AddListener(() => ViewManager.Show<WeaponMenu>() );
+        Debug.Log("Play");
+        LevelManager.Instance.OnStart();
 
-        _playButton.onClick.AddListener(() => ViewManager.Show<PlayView>() );
+        UIManager.Instance.OpenUI<InGame>();
+        Close();
+    }
+
+    public void WeaponButton()
+    {
+        Debug.Log("Shop");
+        UIManager.Instance.OpenUI<WeaponShop>();
+        Close();
     }
 }

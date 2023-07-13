@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.XR;
 
 public enum GameState { MainMenu, Gameplay, Finish }
 
@@ -12,9 +7,17 @@ public class GameManager : Singleton<GameManager>
     private GameState _state;
 
     [SerializeField] private Player player;
-    void Awake()
+
+    public Player Player1 { get => player; set => player = value; }
+
+    private void Start()
     {
         ChangeState(GameState.MainMenu);
+    }
+
+    private void Update()
+    {
+        //Debug.Log(_state.ToString());
     }
 
     public void ChangeState(GameState gameState)
@@ -29,6 +32,6 @@ public class GameManager : Singleton<GameManager>
 
     public Player Player()
     {
-        return player;
+        return Player1;
     }
 }

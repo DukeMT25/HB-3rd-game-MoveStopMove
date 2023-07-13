@@ -1,57 +1,102 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Xml.Linq;
-using Unity.IO.LowLevel.Unsafe;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class LevelManager : Singleton<LevelManager>
 {
     public List<Level> levels;
-    [SerializeField] int node = 45;
-    [SerializeField] float offset = 18;
+
     public Player player;
+    private Level currentLevel;
 
-    Level currentLevel;
-
+    //Pooling list
+    private List<Weapon> weapons = new List<Weapon>();
     private List<AI> bots = new List<AI>();
-    private List<AI> botsInGame = new List<AI>();
+    //Level
     private int levelIndex;
     private int botAmount;
-    private int botInGame;
-    private int botInStack;
+    private int botInLevel;
+    //
+    private int botsInGame;
+
+    
+
+    public List<Weapon> Weapons { get => weapons; set => weapons = value; }
+    public List<AI> Bots { get => bots; set => bots = value; }
+    public int BotsInGame { get => botsInGame; set => botsInGame = value; }
 
     private void Awake()
     {
-        levelIndex = PlayerPrefs.GetInt(Constraint.LEVEL, 0);
+        //PlayerPrefs.SetInt(Constraint.LEVEL, 0);
+        //levelIndex = PlayerPrefs.GetInt(Constraint.LEVEL, 0);
+        levelIndex = 0;
     }
 
     private void Start()
     {
         LoadLevel(levelIndex);
         OnInit();
+        UIManager.Instance.OpenUI<MainMenu>();
     }
 
-    private void FixedUpdate()
+    public void OnInit()
     {
-        if (botInStack > 0)
+
+        player.OnInit();
+
+        if (levels[levelIndex] == null) botInLevel = 20;
+        else botInLevel = levels[levelIndex].GetBotInGame();
+
+        BotsInGame = 0;
+
+
+        player.transform.position = levels[levelIndex].GetStartPoint().position;
+    }
+
+    public void GenerateBotAI(int amount)
+    {
+        for (int i = 0; i < amount; i++)
         {
-            for (int i = 0; i < bots.Count; i++)
+            int xPos;
+            int zPos;
+            int j = Random.Range(0, 4);
+            if (j == 0)
             {
-                if (!bots[i].gameObject.activeSelf && !bots[i].IsDead && botsInGame.Count < botInGame)
-                {
-                    bots[i].gameObject.SetActive(true);
-                    //bots[i].ChangeState(new IdleState());
-                    botsInGame.Add(bots[i]);
-                    botInStack--;
-                }
+                xPos = Random.Range(-40, -5);
+                zPos = Random.Range(-20, 5);
+
+                SpawnAI(xPos, zPos);
             }
+            else if (j == 1)
+            {
+                xPos = Random.Range(5, 40);
+                zPos = Random.Range(-20, 5);
+
+                SpawnAI(xPos, zPos);
+            }
+            else if (j == 2)
+            {
+                xPos = Random.Range(-40, -5);
+                zPos = Random.Range(15, 40);
+
+                SpawnAI(xPos, zPos);
+            }
+            else if (j == 3)
+            {
+                xPos = Random.Range(5, 40);
+                zPos = Random.Range(15, 40);
+
+                SpawnAI(xPos, zPos);
+            }            
         }
-        else if (botsInGame.Count == 0)
-        {
-            //UIManager.Instance.OpenUI<Win>();
-            //UIManager.Instance.CloseUI<InGame>();
-        }
+    }
+
+    public void SpawnAI(int xPos, int zPos)
+    {
+        AI ai = SimplePool.Spawn<AI>(PoolType.Bot, new Vector3(xPos, 0.5f, zPos), Quaternion.identity);
+        ai.OnInit();
+        Bots.Add(ai);
+
+        BotsInGame++;
     }
 
     public void LoadLevel(int indexLevel)
@@ -64,90 +109,27 @@ public class LevelManager : Singleton<LevelManager>
         if (levelIndex < levels.Count)
         {
             currentLevel = Instantiate(levels[levelIndex]);
-            //currentLevel.Onint();
+            //currentLevel.OnInit();
+            
         }
         else
         {
 
         }
-
-        //currentLevel = Instantiate(levels[indexLevel - 1]);
     }
 
-    public void OnInit()
+    private void FixedUpdate()
     {
-        player.OnInit();
-        botAmount = levels[levelIndex].GetBotAmount();
-        botInGame = levels[levelIndex].GetBotInGame();
-        GenerateBotAI(botAmount, GeneratePoolObjectPosition(transform.position, node));
-        player.transform.position = levels[levelIndex].GetStartPoint().position;
-    }
-
-    private void GenerateBotAI(int index, List<Vector3> listPoolObjectPosition)
-    {
-        for (int i = 0; i < index; i++)
+        if (GameManager.Instance.IsState(GameState.Gameplay) && BotsInGame < botInLevel)
         {
-            int randomIndex = Random.Range(0, listPoolObjectPosition.Count);
-            while (IsDesAllCharacter(listPoolObjectPosition[randomIndex]))
-            {
-                randomIndex = Random.Range(0, listPoolObjectPosition.Count);
-            }
-            AI bot = SimplePool.Spawn<AI>(PoolType.Bot, listPoolObjectPosition[randomIndex], Quaternion.identity);
-            bot.OnInit();
-            //bot.UpdateInfo(GameManager.Instance.GetBotAIInfo(i), GameManager.Instance.GetAccessoriesDatas());
-
-            //Indicator indicator = SimplePool.Spawn<Indicator>(PoolType.Indicator);
-            //indicator.SetCharacter(Constant.Cache.GetCharacter(bot.gameObject));
-            //indicator.gameObject.SetActive(false);
-            //bot.Indicator = indicator;
-
-            //CharacterInfo characterInfo = SimplePool.Spawn<CharacterInfo>(PoolType.CharacterInfo);
-            //characterInfo.SetCharacter(Constant.Cache.GetCharacter(bot.gameObject));
-            //characterInfo.gameObject.SetActive(false);
-            //bot.CharacterInfo = characterInfo;
-            //bot.gameObject.SetActive(false);
-            //bots.Add(bot);
+            GenerateBotAI(1);
         }
-    }
-
-    private bool IsDesAllCharacter(Vector3 vector3)
-    {
-        bool isDesAllCharacter = false;
-        isDesAllCharacter = Constraint.IsDes(GameManager.Instance.Player().transform.position, vector3, GameManager.Instance.Player().InGameAttackRange);
-        for (int i = 0; i < bots.Count; i++)
-        {
-            if (Constraint.IsDes(bots[i].transform.position, vector3, bots[i].InGameAttackRange))
-            {
-                isDesAllCharacter = true;
-                break;
-            }
-            else
-            {
-
-            }
-        }
-        return isDesAllCharacter;
-    }
-
-    protected List<Vector3> GeneratePoolObjectPosition(Vector3 a_root, int numCount)
-    {
-        List<Vector3> listPoolObjectPosition = new List<Vector3>();
-        int Row = Mathf.CeilToInt(Mathf.Sqrt(numCount));
-        int Column = Row;
-        for (int i = 0; i < Row; i++)
-        {
-            for (int j = 0; j < Column; j++)
-            {
-                int index = Row * j + i;
-                Vector3 objectPosition = new Vector3((j - (Row / 2)) + offset * j + a_root.x, 0.05f + a_root.y, ((Column / 2) - i) - offset * i + a_root.z);
-                listPoolObjectPosition.Add(objectPosition);
-            }
-        }
-        return listPoolObjectPosition;
     }
 
     public void OnStart()
     {
+        OnReset();
+        //levelIndex = PlayerPrefs.GetInt(Constraint.LEVEL, 0);
         LoadLevel(levelIndex);
         OnInit();
         GameManager.Instance.ChangeState(GameState.Gameplay);
@@ -155,24 +137,44 @@ public class LevelManager : Singleton<LevelManager>
 
     public void OnFinish()
     {
-        //UIManager.Instance.OpenFinishUI();
+        OnReset();
+        UIManager.Instance.CloseUI<InGame>();
         GameManager.Instance.ChangeState(GameState.Finish);
     }
 
-    public void NextLevel()
+    public void OnRevive()
     {
+        player.hp = 1;
+        player.StateMachine.Initialize(player.IdleState);
+        UIManager.Instance.OpenUI<InGame>();
+    }
+
+    public void OnNextLevel()
+    {
+        OnReset();
         levelIndex++;
+        PlayerPrefs.SetInt(Constraint.LEVEL, levelIndex);
+        BotsInGame = 0;
+        
         LoadLevel(levelIndex);
+        OnInit();
+        UIManager.Instance.OpenUI<InGame>();
+        GameManager.Instance.ChangeState(GameState.Gameplay);
     }
 
     public void OnReset()
     {
         SimplePool.CollectAll();
-        bots.Clear();
-        botsInGame.Clear();
-
+        Bots.Clear();
+        CameraFollow.Instance.ResetOffset();
         player.SetTransformPosition(levels[levelIndex].GetStartPoint());
-
         player.OnInit();
+    }
+
+    public void ReturnHome()
+    {
+        OnReset();
+        UIManager.Instance.OpenUI<MainMenu>();
+        GameManager.Instance.ChangeState(GameState.MainMenu);
     }
 }

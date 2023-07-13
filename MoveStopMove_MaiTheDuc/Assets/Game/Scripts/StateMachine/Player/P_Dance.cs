@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class P_Dance : MonoBehaviour
+public class P_Dance : P_State
 {
-    // Start is called before the first frame update
-    void Start()
+    public P_Dance(Character character, Animator anim, int animName) : base(character, anim, animName)
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Enter()
     {
-        
+        base.Enter();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+    }
+
+    public override void Tick()
+    {
+        base.Tick();
     }
 }

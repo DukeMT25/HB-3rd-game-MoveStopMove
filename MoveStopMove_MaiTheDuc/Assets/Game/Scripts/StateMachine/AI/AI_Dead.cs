@@ -22,6 +22,11 @@ public class AI_Dead : AI_State
     {
         base.Tick();
 
-        if (_ai._anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f) _ai.gameObject.SetActive(false);
+        if (_ai._anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+        {
+            SimplePool.Despawn(_ai);
+            SimplePool.Despawn(_ai.Indicator);
+            LevelManager.Instance.BotsInGame--;
+        }
     }
 }

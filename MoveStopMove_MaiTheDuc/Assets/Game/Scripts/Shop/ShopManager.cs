@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class ShopManager : MonoBehaviour
 {
@@ -24,7 +25,9 @@ public class ShopManager : MonoBehaviour
 
     void Start()
     {
-        // currentWeaponIndex = PlayerPrefs.GetInt("SelectedWeapon", 0);
+        _gameManager = GameManager.Instance;
+        _player = _gameManager.Player1;
+        
 
         foreach (GameObject weapon in Weapons)
             weapon.SetActive(false);
@@ -71,16 +74,13 @@ public class ShopManager : MonoBehaviour
 
     public void SetWeapon()
     {
-        PlayerPrefs.SetInt("SelectedWeapon", currentWeaponIndex);
+        PlayerPrefs.SetInt(Constraint.SELECTED_WEAPON, currentWeaponIndex);
         PlayerPrefs.Save();
         Weapons[currentWeaponIndex].GetComponent<Weapon>().Equipped = true;
-        //Call PLayer Update WeaponIndex;
 
         _player.UpdateWeapon();
         HideWeaponsOnHand();
         ShowBtn();
-
-        //ClearPool();
     }
 
     public void BuyWeapon()
@@ -88,8 +88,6 @@ public class ShopManager : MonoBehaviour
         HideWeaponsOnHand();
         SetWeapon();
         Weapons[currentWeaponIndex].GetComponent<Weapon>().Buyed = true;
-
-        //ClearPool();
     }
 
     private void ShowBtn()
@@ -143,14 +141,4 @@ public class ShopManager : MonoBehaviour
             }
         }
     }
-
-    //private void ClearPool()
-    //{
-    //    ObjectPool objpool = _gameManager.WeaponObjectPool[currentWeaponIndex];
-
-    //    for (int i = 0; i < 2; i++)
-    //    {
-    //        objpool.ObjectToPool.OnDespawn();
-    //    }
-    //}
 }

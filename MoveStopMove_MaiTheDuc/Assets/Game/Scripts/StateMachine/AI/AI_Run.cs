@@ -26,7 +26,7 @@ public class AI_Run : AI_State
     public override void Tick()
     {
         base.Tick();
-        _ai.attackTime = 3.5f;
+        _ai.attackTime = 0.5f;
         if (_ai.IsAtDestination())
         {
             _ai.StateMachine.ChangeState(_ai.IdleState);
